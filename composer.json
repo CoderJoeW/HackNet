@@ -1,0 +1,11 @@
+{
+    "name": "hacknet/hacknet",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Hacknet\\": "src/",
+            "Hacknet\\Test\\": "test/"
+        }
+    },
+    "require": {}
+}
