@@ -7,5 +7,7 @@
             "Hacknet\\Test\\": "test/"
         }
     },
-    "require": {}
+    "require": {
+        "nikic/fast-route": "^1.3"
+    }
 }
