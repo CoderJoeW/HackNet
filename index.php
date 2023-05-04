@@ -42,7 +42,7 @@ switch ($routeInfo[0]) {
             $controller = ucfirst(strtolower($vars['controller']));
             $action = strtolower($vars['action']);
 
-            $controllerClass = "{$controller}\\Controller\\{$controller}";
+            $controllerClass = "Hacknet\\{$controller}\\Controller\\{$controller}";
             if (class_exists($controllerClass)) {
                 $controllerInstance = new $controllerClass();
                 if (method_exists($controllerInstance, $action)) {
