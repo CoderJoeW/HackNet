@@ -1,7 +1,7 @@
 <?php
+
 require_once 'vendor/autoload.php';
 
-// Autoload controllers
 spl_autoload_register(function ($class) {
     $prefix = 'src/';
     $base_dir = __DIR__ . '/' . $prefix;
@@ -20,8 +20,20 @@ $dispatcher = FastRoute\simpleDispatcher(function(FastRoute\RouteCollector $r) {
     $r->addRoute('GET', '/{controller}/{action}', 'dynamic_route');
 });
 
-$httpMethod = $_SERVER['REQUEST_METHOD'];
-$uri = $_SERVER['REQUEST_URI'];
+if (php_sapi_name() === 'cli') {
+    $options = getopt('', ['uri::']);
+
+    if (isset($options['uri'])) {
+        $uri = $options['uri'];
+    } else {
+        echo "Missing --uri option.\n";
+        exit(1);
+    }
+} else {
+    $uri = $_SERVER['REQUEST_URI'];
+}
+
+$httpMethod = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 
 $routeInfo = $dispatcher->dispatch($httpMethod, $uri);
 
