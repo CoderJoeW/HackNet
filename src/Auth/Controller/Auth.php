@@ -10,4 +10,8 @@ class Auth extends BaseController{
         $this->render('login');
     }
 
+    public function register(){
+        $this->render('register');
+    }
+
 }
