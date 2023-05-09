@@ -2,7 +2,7 @@
     "Databases": {
         "Mysql": {
             "Host": "localhost",
-            "User": "root",
+            "User": "HackNet",
             "Pass": "SuperSecurePassword",
             "Database": "HackNet"
         }
