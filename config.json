@@ -1,0 +1,10 @@
+{
+    "databases": {
+        "Mysql": {
+            "Host": "localhost",
+            "User": "root",
+            "Pass": "SuperSecurePassword",
+            "Database": "HackNet"
+        }
+    }
+}
