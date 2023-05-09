@@ -2,10 +2,8 @@
 
 namespace Hacknet\Core;
 
-class Request
-{
-    public function getUri()
-    {
+class Request{
+    public function getUri(){
         if (php_sapi_name() === 'cli') {
             $options = getopt('', ['uri::']);
 
@@ -20,8 +18,7 @@ class Request
         }
     }
 
-    public function getHttpMethod()
-    {
+    public function getHttpMethod(){
         return $_SERVER['REQUEST_METHOD'] ?? 'GET';
     }
 }

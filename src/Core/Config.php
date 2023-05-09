@@ -2,12 +2,10 @@
 
 namespace Hacknet\Core;
 
-class Config
-{
+class Config{
     private $data;
 
-    public function __construct($filePath)
-    {
+    public function __construct($filePath){
         if (!file_exists($filePath)) {
             throw new \Exception("Configuration file not found: $filePath");
         }
@@ -20,8 +18,7 @@ class Config
         }
     }
 
-    public function get($key, $default = null)
-    {
+    public function get($key, $default = null){
         $keys = explode('.', $key);
 
         $data = $this->data;

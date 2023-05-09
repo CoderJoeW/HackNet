@@ -2,10 +2,8 @@
 
 namespace Hacknet\Core;
 
-class Autoloader
-{
-    public function autoloadControllers($class)
-    {
+class Autoloader{
+    public function autoloadControllers($class){
         $prefix = 'src/';
         $base_dir = __DIR__ . '/../' . $prefix;
         $len = strlen($prefix);
