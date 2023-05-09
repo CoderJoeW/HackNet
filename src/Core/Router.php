@@ -29,7 +29,7 @@ class Router
                     if (class_exists($controllerClass)) {
                         $controllerInstance = new $controllerClass();
                         if (method_exists($controllerInstance, $action)) {
-                            $controllerInstance->$action();
+                            $controllerInstance->runAction($action);
                         } else {
                             http_response_code(404);
                             echo "Action not found.";

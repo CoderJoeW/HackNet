@@ -5,6 +5,49 @@ use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 class BaseController{
+
+    public bool $cliOnly = false;
+    public bool $authRequired = false;
+
+    public function runAction($action){
+        $this->beforeAction();
+        
+        if(method_exists($this, $action)){
+            $this->$action();
+        }else{
+            http_response_code(404);
+            echo "Action not found.";
+        }
+        
+        $this->afterAction();
+    }
+
+    protected function beforeAction(){
+        if($this->cliOnly){
+            $this->handleCliOnly();
+        }
+
+        if($this->authRequired){
+            $this->handleAuthRequired();
+        }
+    }
+
+    protected function afterAction(){}
+
+    private function handleCliOnly() {
+        if ($this->cliOnly && php_sapi_name() !== 'cli') {
+            http_response_code(403);
+            echo "Forbidden.";
+            exit();
+        }
+    }
+
+    private function handleAuthRequired() {
+        if ($this->authRequired && !isset($_SESSION['LoggedIn'])) {
+            header('Location: /auth/login');
+            exit();
+        }
+    }
     
     protected function render($view, $data = []){
         $controllerNamespace = get_class($this);
