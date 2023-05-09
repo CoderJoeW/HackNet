@@ -1,10 +1,13 @@
 <?php
 namespace Hacknet\Base;
 
+use Hacknet\Core\Config;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 
 class BaseController{
+
+    public Config $config;
 
     public bool $cliOnly = false;
     public bool $authRequired = false;
@@ -23,6 +26,8 @@ class BaseController{
     }
 
     protected function beforeAction(){
+        $this->config = new Config(__DIR__ . '/../../config.json');
+
         if($this->cliOnly){
             $this->handleCliOnly();
         }
