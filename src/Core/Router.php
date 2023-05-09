@@ -4,42 +4,59 @@ namespace Hacknet\Core;
 
 use FastRoute;
 
-class Router
-{
-    public function handleRoute($routeInfo)
-    {
-        switch ($routeInfo[0]) {
-            case FastRoute\Dispatcher::NOT_FOUND:
-                http_response_code(404);
-                echo "Not found.";
-                break;
-            case FastRoute\Dispatcher::METHOD_NOT_ALLOWED:
-                http_response_code(405);
-                echo "Method not allowed.";
-                break;
-            case FastRoute\Dispatcher::FOUND:
-                $handler = $routeInfo[1];
-                $vars = $routeInfo[2];
+class Router{
+    private $defaultRoute = ['controller' => 'Home', 'action' => 'index'];
 
-                if ($handler === 'dynamic_route') {
-                    $controller = ucfirst(strtolower($vars['controller']));
-                    $action = strtolower($vars['action']);
+    public function handleRoute($routeInfo){
+        match($routeInfo[0]) {
+            FastRoute\Dispatcher::NOT_FOUND => $this->handleNotFound(),
+            FastRoute\Dispatcher::METHOD_NOT_ALLOWED => $this->handleMethodNotAllowed(),
+            FastRoute\Dispatcher::FOUND => $this->handleFound($routeInfo[1], $routeInfo[2]),
+            default => $this->handleDefault(),
+        };
+    }
 
-                    $controllerClass = "Hacknet\\{$controller}\\Controller\\{$controller}";
-                    if (class_exists($controllerClass)) {
-                        $controllerInstance = new $controllerClass();
-                        if (method_exists($controllerInstance, $action)) {
-                            $controllerInstance->runAction($action);
-                        } else {
-                            http_response_code(404);
-                            echo "Action not found.";
-                        }
-                    } else {
-                        http_response_code(404);
-                        echo "Controller not found.";
-                    }
+    private function handleNotFound(){
+        $this->redirectToDefault();
+    }
+
+    private function handleMethodNotAllowed(){
+        $this->redirectToDefault();
+    }
+
+    private function handleFound($handler, $vars){
+        if ($handler === 'dynamic_route') {
+            $controller = ucfirst(strtolower($vars['controller'] ?? $this->defaultRoute['controller']));
+            $action = strtolower($vars['action'] ?? $this->defaultRoute['action']);
+
+            $controllerClass = "Hacknet\\{$controller}\\Controller\\{$controller}";
+            if (class_exists($controllerClass)) {
+                $controllerInstance = new $controllerClass();
+                if (method_exists($controllerInstance, $action)) {
+                    $controllerInstance->runAction($action);
+                    return;
                 }
-                break;
+            }
         }
+        $this->redirectToDefault();
+    }
+
+    private function handleDefault(){
+        http_response_code(404);
+        echo "Not found.";
+    }
+
+    private function redirectToDefault(){
+        $controller = $this->defaultRoute['controller'];
+        $action = $this->defaultRoute['action'];
+        $controllerClass = "Hacknet\\{$controller}\\Controller\\{$controller}";
+        if (class_exists($controllerClass)) {
+            $controllerInstance = new $controllerClass();
+            if (method_exists($controllerInstance, $action)) {
+                $controllerInstance->runAction($action);
+                return;
+            }
+        }
+        $this->handleDefault();
     }
 }
