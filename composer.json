@@ -9,7 +9,8 @@
     },
     "require": {
         "nikic/fast-route": "^1.3",
-        "twig/twig": "^3.6"
+        "twig/twig": "^3.6",
+        "pdodb/pdodb": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.1"
